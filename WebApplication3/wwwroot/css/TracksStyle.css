@@ -1,0 +1,19 @@
+﻿.trackMenu {
+    height: 60px;
+    background:blue;
+}
+
+.trackBody {
+    height: 60px;
+    background: gray;
+}
+
+.draggEx {
+    position: absolute;
+    height: 58px;
+    min-width: 30px;
+    background: red;
+    border-radius: 10px;
+    z-index: 1;
+    pointer-events: none;
+}
