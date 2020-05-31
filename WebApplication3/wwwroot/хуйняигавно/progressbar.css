@@ -1,0 +1,16 @@
+@charset "utf-8";
+/* CSS Document */
+html, body {
+background-color: #64B5F6; 
+	display: flex; 
+	justify-content: center; 
+	align-items: center; 
+	position: relative; 
+	height: 100%;
+}
+
+.progress-ringcircle{
+	transform-origin: center;
+	transform: rotate(-90deg);
+	transition: storke-dashoffset 0.3s;
+}

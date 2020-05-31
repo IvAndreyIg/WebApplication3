@@ -16,3 +16,27 @@
 .FourBut{
     display:flex;
 }
+.metWind{
+    width: 60px;
+    height: 90px;
+    position: fixed;
+    left: 1px;
+    top: 1px;
+    background: burlywood;
+    display: none;
+    margin: auto;
+}
+
+.okBut {
+    width:20px;
+    background:rgb(182, 13, 120);
+}
+.okBut:hover {
+/*ебать ты лох*/
+   background: rgba(182, 2, 133,0.8);
+}
+.inputMetr {
+    width: 20px;
+    border-radius: 4px;
+    border: 0.5px solid black;
+}

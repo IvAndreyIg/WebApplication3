@@ -1,0 +1,6 @@
+<div style="display: inline-grid;background:#123123;height:60px;width:42px;">
+
+    <input type="range" min="1" max="100" value="50" class="slider" id="myRange" style="width:40px">
+
+<svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="#8328ff"></circle><polygon transform="rotate(0 20 20)" points="20 13 17 1.5 23 1.5" stroke="red" stroke-opacity="0.9" fill="#36F317" stroke-width="0.5" class="trig"></polygon></svg>
+</div>

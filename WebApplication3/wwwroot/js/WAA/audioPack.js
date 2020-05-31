@@ -13,28 +13,39 @@ export default class AudioBufferPlayer {
    verb = null;
 
     static audioContext = null;
+    //shifter=null;
+    stopTime = 70;
+    startTime = 0.4;
 
-    //public:
-    get position() { return this.position };
-    set position(position) {
-
-        this.position = position < this.trackAudioBuffer.duration ? position : this.trackAudioBuffer.duration
-
-    };
-
-
+    // старт время дробью
+    set startTime(tm) {
+        this.startTime = this.startTime > 1 ? this.startTime / 100 : this.startTime;
+    }
 
 
     constructor(trackSource,start, nodes) {
 
-        if (trackSource instanceof AudioBuffer) {
-            this.trackBuffer = trackSource;
+
+        this.gainN=new GainNode(AudioBufferPlayer.audioContext);
+        this.gainN.gain
+        this.start = start / 800 * 100;
+        this.trackSource = trackSource;
+        this.aContext = AudioBufferPlayer.audioContext;
+        this.position = 0;
+        this.nodes = nodes == undefined ? new Set(): nodes;
+        this.playing = false;
+        console.log('ready1');
+    }
+
+   async initial(){
+        if (this.trackSource instanceof AudioBuffer) {
+            this.trackBuffer = this.trackSource;
             console.log('агсл');
         }
         else {
 
             //подгружаем трек в хранилище
-            window.fetch(trackSource)
+            await window.fetch(this.trackSource)
                 .then(response =>{
                     return response.arrayBuffer();
 
@@ -42,23 +53,30 @@ export default class AudioBufferPlayer {
                 .then(arrayBuffer => AudioBufferPlayer.audioContext.decodeAudioData(arrayBuffer))
                 .then(audioBuffer => {
 
+
                     this.trackAudioBuffer = audioBuffer;
                     this.shifter = new PitchShifter(AudioBufferPlayer.audioContext, this.trackAudioBuffer, 16384);
+                    console.log("idinah");
+                    this.shifter.on('play', (detail) => {
+
+                        //redHead.style.left=(Head+lenthCoff*shifter.timePlayed/6)+"px";
+                        // console.log(detail);
+                        console.log(this.shifter.percentagePlayed);
+                        if (detail.percentagePlayed >= this.stopTime){
+                            console.log("puc");
+                            this.stopTrack();
+                        }
+                        // console.log(redHead.style.left)
+
+                    });
                 });
         }
 
-        this.start = start / 800 * 100;
-        this.trackSource = trackSource;
-        this.aContext = AudioBufferPlayer.audioContext;
-        this.position = 0;
-        this.nodes = nodes == undefined ? 0 : nodes;
-        this.playing = false;
-        this.nodes = new Set();
-        this.trackRate = 1;
-
-
-        console.log('ready');
     }
+
+
+
+
 
 
     setVerb(revFilter, reverbPack, reverbComp) {
@@ -81,6 +99,17 @@ export default class AudioBufferPlayer {
     setRate(rate) {
         this.source.playbackRate.value = (typeof rate) == 'number' ? rate : 1;
     }
+    setTemp120(temp) {
+
+        if (this.playing)
+                this.stopTrack();
+
+        this.shifter.tempo=temp/120;
+
+
+
+
+    }
 
     playTrack(...nodes) {
 
@@ -93,13 +122,21 @@ export default class AudioBufferPlayer {
               //  this.source.buffer = this.trackAudioBuffer;
              //   this.source.playbackRate.value = this.trackRate;
 
-                this.startTime = this.aContext.currentTime - (this.position || 0);
+               
 
                 //setTimeout(()=> {
+               //
+                if(this.startTime>0){
+                    this.shifter.percentagePlayed=this.startTime;
+                    this.startTime=0;
+                }
+               
+        this.gainN.gain.value=5.2;
                     this.connect();
              //   console.log('played');
              //   }, this.start * 1000)
-                
+                console.log("gain2");
+              
 
                 console.log(this.position);
 
@@ -108,7 +145,8 @@ export default class AudioBufferPlayer {
 
             }
             else {   //если нет ожидаем подгрузки
-                setTimeout(this.playTrack.bind(this), 30);
+              //  console.log("pizda");
+                setTimeout(this.playTrack.bind(this), 80);
             }
 
     }
@@ -160,18 +198,24 @@ export default class AudioBufferPlayer {
                 thisNode = node;
             }
             if (this.verb) {
-                console.log("VERBON")
+                console.log("VERBON2");
                 thisNode.connect(this.verb);
             }
-            else
-                thisNode.connect(this.aContext.destination);
+            else {
+                console.log("VERBON1");
+            thisNode.connect(this.aContext.destination);
+                }
         }
         if (this.verb) {
-            console.log("VERBON")
+
+            console.log("VERBON3");
             thisNode.connect(this.verb);
         }
         else {
-            thisNode.connect(this.aContext.destination);
+
+            console.log("VERBON4");
+            thisNode.connect(this.gainN);
+            this.gainN.connect(this.aContext.destination);
         }
 
         

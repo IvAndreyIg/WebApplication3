@@ -98,7 +98,7 @@ div {
 }
 
 .trackName {
-    -webkit-font-smoothing:;
+
     box-sizing: border-box;
     color: rgb(245, 95, 0);
     display: block;
@@ -143,7 +143,7 @@ div {
     height: 42px;
     flex-shrink: 0;
     /* display: inline-block; */
-    margin: -px;
+
 }
 
 .panel2 {

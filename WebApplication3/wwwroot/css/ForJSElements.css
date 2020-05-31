@@ -1,0 +1,95 @@
+.inputRange1 {
+    left: -10px;
+    position: absolute;
+    width: 60px;
+    height: 5px;
+    display: none;
+}
+
+.inputText1 {
+    color: rgb(128, 250, 0);
+    background: rgba(0,0,0,0);
+    border: 0px;
+    width: 30px;
+    font-size: 10px;
+    display: none;
+    top: 35px;
+    left: 3px;
+    position: absolute;
+    z-index: 1111;
+    text-align: center;
+}
+
+.KnobDiv {
+    width: 40px;
+    height: 58px;
+    left: 50px;
+    position: absolute;
+    display: inline-grid;
+    border: 0px;
+}
+
+    .KnobDiv:hover .inputText1 {
+        display: block;
+    }
+
+    .KnobDiv:hover .inputRange1 {
+        display: block;
+    }
+.knobic {
+    position: absolute;
+    top: 23px;
+}
+
+
+.winBlock {
+    border: 0px;
+    width: 180px;
+    height: 66px;
+    position: fixed;
+    background: rgba(120,100,100,0.4);
+    left: 47%;
+    top: 47%;
+    z-index: 1111111;
+    border-radius: 5px;
+    pointer-events: all;
+}
+
+.butOk {
+    cursor: pointer;
+    top: 25%;
+    position: absolute;
+    left: 37%;
+    border: 2px double rgba(220, 19, 165, 0.86);
+    width: 35px;
+    height: 20px;
+    text-align: center;
+    border-radius: 5px;
+    background: rgba(171, 208, 74, 0.96);
+    pointer-events: all;
+}
+
+    .butOk:hover {
+        pointer-events: all;
+        background: rgba(214, 255, 10, 0.5);
+    }
+
+.progress-ringcircle {
+    transform-origin: center;
+    transform: rotate(-90deg);
+    transition: storke-dashoffset 0.9s;
+}
+.BarDiv{
+    text-align:center;
+    border:0px;
+    position: fixed;
+    left: 40%;
+    top: 40%;
+
+    z-index:111111;
+}
+.bartext{
+    position:absolute;
+    top:40%;
+    left:41%
+}

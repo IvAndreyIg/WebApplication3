@@ -3,19 +3,74 @@
 
 // Write your JavaScript code.
 import AudioBufferPlayer from "./WAA/audioPack.js"
-import FullTrackPack  from "./classes.js";
-import { getRId, getDragEl}  from "./ElementsPack.js";
-//let tU = new User();
-//console.log(tU);
-console.log(FullTrackPack);
-//console.log(getRId(new Map()));
-//console.log("hello");
+import FullTrackPack from "./classes.js";
+import AllElements from "./DOMController.js";
+import { getRId, getDragEl } from "./ElementsPack.js";
+
+let tRacksM = new Map();
+document.tr=tRacksM;
+
 let trackPacks = document.getElementsByClassName("trackPack");
 let buttonAct = document.querySelector(".buttonList");
 let trackChoicer = document.querySelector(".trackChoicer");
 let rightList = document.querySelector(".rightTrackList");
 let centerL = document.querySelector(".centerPlace");
+let Tempo = document.querySelector(".met");
+let MetWind = document.querySelector(".metWind");
+let MetOK = document.querySelector(".okBut");
+let inPut = document.querySelector(".inputMetr");
+let butOk = document.querySelector(".butOk");
+let winBlock = document.querySelector(".winBlock");
+let BarFuck=AllElements.getCircBarF(70);
+document.body.style.pointerEvents = "none";
+console.log("BarFuck");
+console.log(BarFuck);
+//document.body.style = "pointer-events:none";
+butOk.onclick = function (e) {
+    AudioBufferPlayer.audioContext = new AudioContext();
+    document.body.style.pointerEvents = "";
+    winBlock.style.display="none";
+}
 
+
+MetOK.onclick = function (e) {
+
+    tRacksM.forEach(function (el, i, arr) {
+        try {
+
+            BBbuttons[3].innerHTML = "Pl"
+            playing = false;
+            el.player.setTemp120(inPut.value);
+
+        } catch (e) {
+            // ...выполнится catch
+            console.log("Извините, в данных ошибка, мы попробуем получить их ещё раз");
+            console.log(e.name);
+            console.log(e.message);
+        }
+    });
+}
+
+Tempo.onmouseover=function(e) {
+    MetWind.style.left = Tempo.getBoundingClientRect().left + "px";
+    MetWind.style.top = Tempo.getBoundingClientRect().top-60 + "px";
+    MetWind.style.display="block";
+};
+Tempo.onmouseout = function (e) {
+     BBbuttons[3].innerHTML = "Pl"
+        playing = false;
+    MetWind.style.display = "none";
+};
+
+
+
+let alEl = new AllElements(document.getElementsByClassName("trackPack"),
+    document.querySelector(".buttonList"),
+    document.querySelector(".trackChoicer")
+
+
+
+);
 //console.log(rightList.classList.contains("rightTrackList"));
 
 let FTM = document.querySelector("#FTM");
@@ -26,43 +81,23 @@ FullTrackPack.before1 = FTM;
 FullTrackPack.before2 = FTB;
 
 //назначаем контекст для всех объектов
-AudioBufferPlayer.audioContext = new AudioContext();;
-console.log("Player");
-console.log(AudioBufferPlayer);
-let tRacksM = new Map();
-console.log(tRacksM);
-console.log(getRId(tRacksM));
-//let trakEx = new FullTrackPack(centerL, getRId(new Map()), FTM, FTB);
+//AudioBufferPlayer.audioContext = new AudioContext();;
+//console.log("Player");
+//console.log(AudioBufferPlayer);
 
-//console.log(trackPacks);
 
-/*for (let pack in trackPacks) {
-    console.log(pack);
-}*/
-//console.log(buttonAct);
 console.log(rightList);
 buttonAct.onclick = function () {
    // console.log("hui")
     trackChoicer.classList.toggle('transform-active');
 
-   /* tRacksM.forEach(function (el, i, arr) {
-         try {
-            console.log(el);
-            el.player.playTrack();
-          
-        } catch (e) {
-            // ...выполнится catch
-            console.log("Извините, в данных ошибка, мы попробуем получить их ещё раз");
-            console.log(e.name);
-            console.log(e.message);
-        }
-    });*/
 
+ 
     
 };
 
-let BBbuttons = document.getElementsByClassName("BottomButton");
 
+let BBbuttons = document.getElementsByClassName("BottomButton");
 
 let playing = false;
 
@@ -72,8 +107,8 @@ BBbuttons[3].onclick = function () {
     if (!playing) {
         tRacksM.forEach(function (el, i, arr) {
             try {
-                
-                el.player.playTrack();
+
+                setTimeout(x=> el.player.playTrack(),0);
             
             } catch (e) {
                 // ...выполнится catch
@@ -82,7 +117,7 @@ BBbuttons[3].onclick = function () {
                 console.log(e.message);
             }
         });
-        console.log("huis");
+        console.log("start");
         BBbuttons[3].innerHTML = "Pa";
         playing = true;
     } else {
@@ -98,8 +133,9 @@ BBbuttons[3].onclick = function () {
                 console.log(e.message);
             }
         });
+        
+        console.log("stop");
         BBbuttons[3].innerHTML = "Pl"
-        console.log("huis");
         playing = false;
     }
 
@@ -259,6 +295,7 @@ function trackDraging(e, track, tName) {
 
     // 4. отследить окончание переноса
     document.onmouseup = function (e) {
+        BarFuck(10);
         console.log("left:");
         
        
@@ -269,13 +306,13 @@ function trackDraging(e, track, tName) {
 
         tName.querySelector(".auTrack");
           
-
+            //Начало
         if (e.target.classList.contains("rightTrackList") || e.target.id === "FTB") {
           //  console.log("K:");
             console.log(red.getBoundingClientRect().left - FTB.getBoundingClientRect().left);
            // -FTB.getBoundingClientRect().left
             let id = getRId(tRacksM);
-            let el = new FullTrackPack(id, cloneName, red.querySelector(".auTrack").getAttribute("src"), red.getBoundingClientRect().left - FTB.getBoundingClientRect().left);
+            let el = new FullTrackPack(BarFuck,id, cloneName, red.querySelector(".auTrack").getAttribute("src"), red.getBoundingClientRect().left - FTB.getBoundingClientRect().left);
  // el.setStart(red.getBoundingClientRect().left - FTB.getBoundingClientRect().left);
             tRacksM.set(id, el);
           
@@ -286,7 +323,7 @@ function trackDraging(e, track, tName) {
                 let id = getRId(tRacksM);
               //  console.log("red:");
               //  console.log(red.querySelector(".auTrack").getAttribute("src"));
-                let el = new FullTrackPack(id, tName, red.querySelector(".auTrack").getAttribute("src"), red.getBoundingClientRect().left - FTB.getBoundingClientRect().left, TObj.menuDiv, TObj.bodyDiv);
+                let el = new FullTrackPack(BarFuck,id, tName, red.querySelector(".auTrack").getAttribute("src"), red.getBoundingClientRect().left - FTB.getBoundingClientRect().left, TObj.menuDiv, TObj.bodyDiv);
                    // el.setStart(red.getBoundingClientRect().left - FTB.getBoundingClientRect().left);
                 tRacksM.set(id, el);
                
@@ -297,7 +334,7 @@ function trackDraging(e, track, tName) {
 
       red.remove();
         cloneName.remove();
-
+        
    // console.log("up2");
  //console.log("етот");
        // console.log(e);
