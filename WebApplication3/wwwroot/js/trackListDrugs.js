@@ -295,7 +295,7 @@ function trackDraging(e, track, tName) {
 
     // 4. отследить окончание переноса
     document.onmouseup = function (e) {
-        BarFuck(10);
+        
         console.log("left:");
         
        
@@ -308,6 +308,7 @@ function trackDraging(e, track, tName) {
           
             //Начало
         if (e.target.classList.contains("rightTrackList") || e.target.id === "FTB") {
+            BarFuck(10);
           //  console.log("K:");
             console.log(red.getBoundingClientRect().left - FTB.getBoundingClientRect().left);
            // -FTB.getBoundingClientRect().left
@@ -318,6 +319,7 @@ function trackDraging(e, track, tName) {
           
         } else
             if (e.target.classList.contains("trackBody")) {
+                BarFuck(10);
                 console.log(red.getBoundingClientRect().left - e.target.getBoundingClientRect().left);
                 let TObj = tRacksM.get(e.target.id);
                 let id = getRId(tRacksM);

@@ -9,8 +9,16 @@ using WebApplication3.Models;
 
 namespace WebApplication3.Controllers
 {
+  //  [Route("Music")]
     public class MusicController : Controller
     {
+
+         [Route("Index")]
+        public IActionResult Index()
+        {
+            return View();
+        }
+
         private readonly ILogger _logger;
 
         private readonly TrackService db;
