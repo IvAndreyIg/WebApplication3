@@ -28,6 +28,7 @@ import minsSecs from './minsSecs.js';
 import noop from './noop.js';
 
 const onUpdate = function (sourcePosition) {
+  console.log("я шлюха");
   const currentTimePlayed = this.timePlayed;
   const sampleRate = this.sampleRate;
   this.sourcePosition = sourcePosition;

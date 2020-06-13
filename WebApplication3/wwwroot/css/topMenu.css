@@ -1,0 +1,73 @@
+﻿.TimeLineCanvasNumers {
+    height: 24px;
+    border: 0px;
+}
+
+.LineCanvas {
+    height: 100%;
+    width: 100%;
+}
+
+.TimeLineHandler {
+    height: 20px;
+    border: 0px;
+    background: rgba(251, 255, 0, 0.94);
+}
+
+/*гавнобогданов*/
+.Handler {
+   
+    display: flex;
+    height: 16px;
+    width: 300px;
+    border: 0px;
+    border-radius: 5px;
+    background: wheat;
+    top: 2px;
+    position: relative;
+}
+
+.leftRsizer {
+    cursor: col-resize;
+    height: 12px;
+    width: 12px;
+    background: blueviolet;
+    border-radius: 5px;
+    top: 1px;
+    left: 1px;
+    position: relative;
+    font-size: large;
+    line-height: 13px;
+    color: white;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -khtml-user-select: none;    /* Konqueror */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;
+}
+
+.rightRsizer {
+    cursor: col-resize;
+    color: white;
+    height: 12px;
+    width: 12px;
+    background: blueviolet;
+    border-radius: 5px;
+    top: 1px;
+    right: 1px;
+    position: absolute;
+    font-size: large;
+    line-height: 13px;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -khtml-user-select: none;    /* Konqueror */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;
+}
+.headArr{
+    z-index: 11111;
+    left:-10px;
+    position:absolute;
+}

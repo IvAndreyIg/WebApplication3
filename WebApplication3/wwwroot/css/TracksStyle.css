@@ -1,9 +1,9 @@
 ﻿.trackMenu {
     height: 60px;
-    background:rgba(191, 135, 67, 0.50)
+    background: rgba(191, 135, 67, 0.50)
 }
 
-.trackBody {
+.trackBody {border: 1px solid rgb(146, 206, 194);
     height: 60px;
     background: gray;
 }
@@ -18,12 +18,74 @@
     pointer-events: none;
 }
 
-#FTB{
-
-   /* display:none;*/
-    
+#FTB {
+    /* display:none;*/
 }
 
 #FTM {
-   /* display: none;*/
+    /* display: none;*/
+}
+
+.tracksWorkPanel {
+    /* height: 40px; */
+    /* display: inline-grid; */
+    /* display: inline-block; */
+    white-space: nowrap;
+    z-index: 3;
+    border: 1px dotted black;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.panel1 {
+    width: 200px;
+    height: 42px;
+    flex-shrink: 0;
+    /* display: inline-block; */
+}
+
+.panel2 {
+
+width: 100%;
+    min-width: 100px;
+    height: 42px;
+/*    background: chartreuse;*/
+    /* display: inline-block; */
+}
+
+.panel11 {
+    width: 200px;
+    height: 12px;
+    flex-shrink: 0;
+    /* display: inline-block; */
+    border: 0px;
+}
+
+.panel21 {
+    overflow: auto;
+    width: 100%;
+    /* max-width: 1500px; */
+    min-width: 100px;
+    height: 12px;
+   border:0px;
+    /* display: inline-block; */
+}
+
+.tracksWorkPanelScroll {
+    width: 100%;
+    /* height: 40px; */
+    /* display: inline-grid; */
+    /* display: inline-block; */
+    white-space: nowrap;
+    z-index: 3;
+    border: 1px dotted black;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.scrollBar {
+    height:1px;
+    width: 6000px;
 }

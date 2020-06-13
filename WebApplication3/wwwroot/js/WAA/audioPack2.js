@@ -30,16 +30,15 @@ export default class AudioBufferPlayer {
 
 
         this.gainN=new GainNode(AudioBufferPlayer.audioContext);
-        this.gainN.gain;
+        this.gainN.gain
         this.start = start / 800 * 100;
         this.trackSource = trackSource;
 
         this.aContext = AudioBufferPlayer.audioContext;
         this.position = 0;
-        this.nodes = nodes|| new Set();
+        this.nodes = nodes == undefined ? new Set(): nodes;
         this.playing = false;
         console.log('ready1');
-
     }
 
     async initial() {
@@ -62,19 +61,44 @@ export default class AudioBufferPlayer {
                     //console.log("duration:");
                     //console.log(audioBuffer.duration);
                     this.trackAudioBuffer = audioBuffer;
+                    this.shifter = new PitchShifter(AudioBufferPlayer.audioContext, this.trackAudioBuffer, 16384);
+                    console.log("idinah");
+                    this.shifter.on('play', (detail) => {
 
-                    this.aContext = AudioBufferPlayer.audioContext;
-                    this.position = 0;
+                        //redHead.style.left=(Head+lenthCoff*shifter.timePlayed/6)+"px";
+                        // console.log(detail);
+                        console.log(this.shifter.percentagePlayed+" | "+this.shifter.sourcePosition);
 
-                    this.playing = false;
-                    this.nodes = new Set();
-                    this.trackRate = 1;
-                    console.log('ready');
+                        if (detail.percentagePlayed >= (this.tempstopTime||this.stopTime)){
+                            console.log("puc");
+                            this.stopTrack();
+                            this.tempstopTime=undefined;
+                        }
+                        // console.log(redHead.style.left)
+                       // this.dur=this.trackAudioBuffer;
+                        if(this.Hui2){
+                            this.gainN.gain.value=1.0;
+
+                        }else {
+                            this.Hui2=true;
+                        }
+
+                    });
                 });
        }
         return this.trackAudioBuffer.duration;
 
     }
+
+    getBufferCont(){
+        //this.trackAudioBuffer
+        let DataChen=[buffer.getChannelData(0),buffer.getChannelData(1)];
+
+    }
+
+
+
+
 
     setVerb(revFilter, reverbPack, reverbComp) {
 
@@ -96,54 +120,76 @@ export default class AudioBufferPlayer {
     setRate(rate) {
         this.source.playbackRate.value = (typeof rate) == 'number' ? rate : 1;
     }
+    setTemp120(temp) {
 
-    playTrack(perspos,...nodes) {
+        if (this.playing)
+                this.stopTrack();
+
+        this.shifter.tempo=temp/120;
+
+
+
+
+    }
+
+    playTrack(startTime=this.startTime,stopTime=this.stopTime) {
 
         if (!this.playing)
             if (this.trackAudioBuffer != null) {
+                this.tempstopTime=stopTime;
                 this.playing = true;
-                this.rev = this.aContext.createConvolver();
-                this.source = this.aContext.createBufferSource();
-                this.source.onended=()=>{
-                    console.log("открывай уши");
-                    this.position=0;
+               // this.rev = this.aContext.createConvolver();
+               // this.source = this.aContext.createBufferSource();
 
-                    this.playing = false;
+              //  this.source.buffer = this.trackAudioBuffer;
+             //   this.source.playbackRate.value = this.trackRate;
 
-                    this.source&&(console.log("pig"));
-                    this.source&&(this.source.stop(0));
-                    this.source = null;
-                };
+               
 
-                this.source.buffer = this.trackAudioBuffer;
-                this.source.playbackRate.value = this.trackRate;
-                console.log(this.position);
-                this.position=perspos!==undefined?perspos*this.trackAudioBuffer.duration:this.position;
-                this.startTime = this.aContext.currentTime - (this.position || 0);
+                //setTimeout(()=> {
+               //
+                console.log("startTime:"+startTime);
+                if(startTime>0){
+                    this.shifter.percentagePlayed=startTime;
+                    startTime=0;
+                }
+             //   gainTemp
+                this.gainN.gain.value=0.0;
+                    this.connect();
+                //this.gainN.gain.value=1.0;
+                /*if(startTime>0){
+                    this.shifter.percentagePlayed=startTime;
+                    startTime=0;
+                }*/
+             //   console.log('played');
+             //   }, this.start * 1000)
+              //  console.log("gain2");
+              
 
-                this.connect();
+              //  console.log(this.position);
 
 
-                this.source.start(this.aContext.currentTime, this.position);
-                console.log('played');
+                
 
             }
             else {   //если нет ожидаем подгрузки
-                setTimeout(this.playTrack.bind(this), 30);
+              //  console.log("pizda");
+                setTimeout(this.playTrack.bind(this), 80);
             }
 
     }
     stopTrack() {
 
         if (this.playing) {
-            this.source.stop(0);
-            this.position = this.aContext.currentTime - this.startTime;
+            this.Hui2=false;
+            this.disconnectALL();
 
 
-            this.source = null;
+
+
             this.playing = false;
         }
-
+       
     }
     addNodes(...newNodes) {
         console.log("before:");
@@ -169,7 +215,7 @@ export default class AudioBufferPlayer {
     connect(...nodes) {
         this.disconnectALL();
         this.nodes = nodes.length > 0 ? new Set(nodes) : this.nodes;
-        let thisNode = this.source;
+        let thisNode = this.shifter;
         if (this.nodes.size > 0) {
 
             console.log("node:");
@@ -181,21 +227,31 @@ export default class AudioBufferPlayer {
                 thisNode = node;
             }
             if (this.verb) {
-                console.log("VERBON")
+                console.log("VERBON2");
                 thisNode.connect(this.verb);
             }
-            else
-                thisNode.connect(this.aContext.destination);
+            else {
+                console.log("VERBON1");
+            thisNode.connect(this.aContext.destination);
+                }
         }
         if (this.verb) {
-            console.log("VERBON")
+
+            console.log("VERBON3");
             thisNode.connect(this.verb);
         }
         else {
-            thisNode.connect(this.aContext.destination);
+
+         //   console.log("VERBON4");
+            console.log("еба1"+this.shifter.percentagePlayed);
+            thisNode.connect(this.gainN);
+            this.gainN.connect(this.aContext.destination);
+
+            console.log(this.shifter.percentagePlayed);
+            console.log("еба2"+this.shifter.percentagePlayed);
         }
 
-
+        
 
     }
 
@@ -217,7 +273,7 @@ export default class AudioBufferPlayer {
             this.nodes.delete(node);
         }
 
-        this.source.disconnect();
+      //  this.source.disconnect();
         this.connect();
         //  this.nodes.length=0;
         // this.connect();
@@ -230,7 +286,7 @@ export default class AudioBufferPlayer {
             val.disconnect();
         })
 
-        this.source.disconnect();
+        this.shifter.disconnect();
         // this.connect();
         //  this.nodes.length=0;
         // this.connect();

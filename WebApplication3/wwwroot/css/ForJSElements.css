@@ -93,3 +93,18 @@
     top:40%;
     left:41%
 }
+.TrackDragDiv{
+    border:0px;
+    border-radius: 5px;
+    height: 60px;
+    position: relative;
+}
+.trackSVG{
+    border: 0.5px dot-dot-dash royalblue;
+    pointer-events: none;
+}
+.TrackDragName {
+    pointer-events: none;
+    position: absolute;
+    left: 0px;
+}

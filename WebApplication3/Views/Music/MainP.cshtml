@@ -10,11 +10,14 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>View</title>
+    <link href="~/css/APointerSpecialt.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="~/css/StyleN1.css" rel="stylesheet" />
     <link href="~/css/TracksStyle.css" rel="stylesheet" />
     <link href="~/css/ForJSElements.css" rel="stylesheet" />
     <link href="~/css/ButtomStyle.css" rel="stylesheet" />
+    <link href="~/css/Tags.css" rel="stylesheet" />
+    <link href="~/css/topMenu.css" rel="stylesheet" />
 </head>
 <body style="
     border: 5px black;
@@ -24,45 +27,63 @@
             OK
         </div>
     </div>
-    <header>Head</header>
+    <header class="het">Head</header>
     <div class="workPlace">
-
-
 
         <div class="tracksWorkPanel">
             <div class="panel1">
             </div>
             <div class="panel2">
+                <div class="TimeLineCanvasNumers">
+                    <canvas class="LineCanvas" id="ko" height="20" > не работает</canvas>
+                    
+                </div>
+                <div class="TimeLineHandler">
+                    <div class="Handler">
+                        <div class="leftRsizer">&lt;</div>
+                        <div class="rightRsizer">&gt;</div>
+                        
+                        <svg class="headArr" width="20" height="1000"  viewBox="0 0 20 1000" fill="#FF0000" xmlns="http://www.w3.org/2000/svg">
+                                <g style="pointer-events:none;">
+                                    <!--transform="translate(1,1)"-->
+                                    <polygon style="pointer-events:none;" points="0,0 20,0 10,9
+                                         " class="triangle"></polygon>
+                                    <line class="redLine" stroke="#FF0000" stroke-width="1" x1="10" x2="10" y1="8" y2="1000" />
+
+                                </g>
+
+                        </svg>
+
+                       
+                    </div>
+                </div>
             </div>
-
-
-
-
         </div>
 
-
-
-
         <div class="centerPlace">
+
             <div class="leftTrackList">
                 <div class="trackMenu" id="FTM">
                     первичный
                 </div>
-
             </div>
+
             <div class="rightTrackList">
                 <div class="trackBody" id="FTB">
                     первичный
                 </div>
             </div>
 
-
-
         </div>
 
+        <div class="tracksWorkPanelScroll">
+            <div class="panel11">
+            </div>
+            <div class="panel21">
+                <div class="scrollBar"></div>
+            </div>
 
-
-
+        </div>
 
         <div class="trackChoicer transform">
 
@@ -91,19 +112,9 @@
 
                         </div>
 
-
                     </div>
 
-
-
-
                 }
-
-
-
-                
-
-                
 
             </div>
             <div class="buttonList">
@@ -120,7 +131,7 @@
             add Chanel N5
         </div>
         <div class="spacePool"></div>
-        <div class="timePool">Time</div>
+        <div class="timePool">"00:00:000"</div>
         <div class="spacePool"></div>
         <div class="FourBut">
 

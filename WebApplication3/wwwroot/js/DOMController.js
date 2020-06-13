@@ -171,7 +171,46 @@ static getLKnobEL(obj,objVal,min,max,val,step){
     divf.append(inputText);
     divf.append(knob);
     return divf;
+    }
+
+
+    //случайный цвет, прозрачность указать
+    static   random_rgba (opacity=0.75) {
+    let o = Math.round, r = Math.random, s = 255;
+        return 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + opacity + ')';
 }
+
+    static getTrackGrabber_SVG(Name,width=50,string) {
+        
+        let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+
+        svg.setAttribute('width',width.toString());
+        svg.setAttribute('height',50+"");
+        svg.setAttribute('viewBox',`0 0 ${width} 50`);
+        svg.setAttribute("class", "trackSVG");
+        let PAth= document.createElementNS("http://www.w3.org/2000/svg", "path");
+
+        //PAth.setAttribute('d',string);
+        PAth.setAttribute('fill',"#94A111");
+
+
+
+
+        let bartext = document.createElement("span");
+        bartext.className = "TrackDragName";
+        bartext.innerText=Name;
+
+        let dif = document.createElement("div");
+        dif.classList.add("pointerEventsDis","TrackDragDiv");
+        dif.style.background=AllElements.random_rgba();
+        dif.style.width=width+"px";
+        dif.append(svg);
+        dif.append(bartext);
+
+
+
+        return dif;
+    }
 
 
 
@@ -203,3 +242,4 @@ static getLKnobEL(obj,objVal,min,max,val,step){
 
 
 }
+

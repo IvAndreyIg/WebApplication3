@@ -1,6 +1,15 @@
 import AudioBufferPlayer from "./audioPack.js";
 
-AudioBufferPlayer.audioContext= new AudioContext();
 
-const buzova='jagodica.mp3';
-new AudioBufferPlayer(buzova).playTrack();
+
+const buzova='40sec.mp3';
+
+setTimeout(x=>{
+    AudioBufferPlayer.audioContext= new AudioContext();
+    window.a=new AudioBufferPlayer(buzova);
+    a.initial().then(z=>{
+
+        a.playTrack(0.20);
+    });
+
+},2000);
