@@ -26,7 +26,9 @@ export default class AudioBufferPlayer {
     }
 
 
+
     constructor(trackSource,start, nodes) {
+
 
 
         this.gainN=new GainNode(AudioBufferPlayer.audioContext);
@@ -36,9 +38,9 @@ export default class AudioBufferPlayer {
 
         this.aContext = AudioBufferPlayer.audioContext;
         this.position = 0;
-        this.nodes = nodes|| new Set();
+        this.nodes = nodes|| new Map();
         this.playing = false;
-        console.log('ready1');
+       // console.log('ready1');
 
     }
 
@@ -63,13 +65,10 @@ export default class AudioBufferPlayer {
                     //console.log(audioBuffer.duration);
                     this.trackAudioBuffer = audioBuffer;
 
-                    this.aContext = AudioBufferPlayer.audioContext;
-                    this.position = 0;
 
-                    this.playing = false;
-                    this.nodes = new Set();
+
                     this.trackRate = 1;
-                    console.log('ready');
+                   // console.log('ready');
                 });
        }
         return this.trackAudioBuffer.duration;
@@ -105,7 +104,7 @@ export default class AudioBufferPlayer {
                 this.rev = this.aContext.createConvolver();
                 this.source = this.aContext.createBufferSource();
                 this.source.onended=()=>{
-                    console.log("открывай уши");
+                //    console.log("открывай уши");
                     this.position=0;
 
                     this.playing = false;
@@ -166,9 +165,9 @@ export default class AudioBufferPlayer {
         console.log(this.nodes);
         return this;
     }
-    connect(...nodes) {
+    connect(nodes) {
         this.disconnectALL();
-        this.nodes = nodes.length > 0 ? new Set(nodes) : this.nodes;
+        this.nodes = nodes=!undefined > 0 ? nodes : this.nodes;
         let thisNode = this.source;
         if (this.nodes.size > 0) {
 

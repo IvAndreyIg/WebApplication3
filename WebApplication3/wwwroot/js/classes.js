@@ -11,6 +11,7 @@ import AllElements from "./DOMController.js";
 export default class FullTrackPack {
 
     //статические переменные
+    static closureSP;
     static loadMenu = "idinahui";
     static before1;
     static before2;
@@ -117,7 +118,7 @@ export default class FullTrackPack {
             //ПЕРЕДВИЖЕНИЕ ТРЕКА ПО ПОЛОСЕ
             this.trackGrabber_svg.onmousedown = e=>  {
 
-
+                FullTrackPack.closureSP.ST();
                 let Start=e.pageX;
 
                 console.log("Bogdanovdown:"+this.RealStartLeft);
@@ -137,6 +138,7 @@ export default class FullTrackPack {
                 };
 
                 document.onmouseup =  e=> {
+                    FullTrackPack.closureSP.Pl();
                     document.onmousemove = null;
                     //pointerClass.disabled = true;
                 }

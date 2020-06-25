@@ -21,7 +21,7 @@ namespace WebApplication3.Models
 
         public TrackService()
         {
-            string connectionString = "mongodb://localhost:27017/musicstore3";
+            string connectionString = "mongodb://212.232.75.37:27017/musicstore3";
 
             var connection = new MongoUrlBuilder(connectionString);
 

@@ -6,7 +6,7 @@ import AudioBufferPlayer from "./WAA/audioPack.js"
 import FullTrackPack from "./classes.js";
 import AllElements from "./DOMController.js";
 import Handler from "./Handler.js";
-import { getRId, getDragEl } from "./ElementsPack.js";
+import { getRId, getDragEl,getPauseSVG } from "./ElementsPack.js";
 //import Clocks from "./Clocks.js";
 let tRacksM = new Map();
 document.tr = tRacksM;
@@ -34,20 +34,21 @@ let FTB = document.querySelector("#FTB");
 let BBbuttons = document.getElementsByClassName("BottomButton");
 
 
-let closurePS=()=>{
+let closurePS=(()=>{
     let playing = false;
     let Pl=()=>{
         window.Clocks.startTimer();
 
         console.log("start");
-        BBbuttons[3].innerHTML = "Pa";
+        BBbuttons[3].innerHTML = "";
+        BBbuttons[3].append(getPauseSVG());
         playing = true;
     };
     let Pa=()=>{
         window.Clocks.pauseTime();
         tRacksM.forEach(function (el, i, arr) {
             try {
-
+               el.player.stopTrack();
 
 
             } catch (e) {
@@ -66,7 +67,7 @@ let closurePS=()=>{
         window.Clocks.stopTime();
         tRacksM.forEach(function (el, i, arr) {
             try {
-
+                el.player.stopTrack();
 
 
             } catch (e) {
@@ -83,9 +84,9 @@ let closurePS=()=>{
     };
     let toggle=()=>{
         if (!playing) {
-
+            Pl();
         } else {
-
+            Pa();
         }
 
     };
@@ -95,7 +96,10 @@ let closurePS=()=>{
 
     }
 
-};
+})();
+
+//ДЛЯ ОСТАНОВКИ ПРИ ДВИЖЕРИИ ТРЕКА
+FullTrackPack.closureSP=closurePS;
 
 window.Clocks={
     timeOnStart:0,
@@ -129,9 +133,9 @@ window.Clocks={
             try {
               //  console.log("el.player.dur");
                // console.log(el.duration);
-                console.log("GAVNO");
-                console.log(el);
-                console.log(maThTime+"| puccc|"+el.leftStartTime+"| |"+this.timeOnStop+"| "+el.endTime);
+         //       console.log("GAVNO");
+           //     console.log(el);
+             //   console.log(maThTime+"| puccc|"+el.leftStartTime+"| |"+this.timeOnStop+"| "+el.endTime);
                 if(maThTime<el.leftStartTime){
                     console.log("p1");
                     if(el.leftStartTime<this.timeOnStop){
@@ -163,6 +167,7 @@ window.Clocks={
                 console.log(e.message);
             }
         });
+        //ЕСЛИ ВРЕМЯ НАЧАЛО УЖЕ ПРОШЛО ЗАПУСКАЕМ ТРЕК
         tempTrToS.forEach( (el, i, arr)=> {
 
             let emptywidths=maThTime-el.leftStartTime;
@@ -180,6 +185,8 @@ window.Clocks={
             diff=this.tempTime-maThTime;
            // lastTemp=tempTime;
            // console.log(tempTime+" sp : "+diff);
+
+            //ВРЕМЯ Т КОНЧИЛОСЬ ОСТАНАВЛИВАЕМ ВСЕ ИНАЧЕ ПРОДОЛЖАЕМ
             if(this.tempTime>=this.timeOnStop+this.timeSpace){
                 this.stopAll();
             }else{
@@ -189,7 +196,7 @@ window.Clocks={
                 handler.leftRight[2].style.left=startArr+(this.tempTime-firsttime)/1000*FullTrackPack.pixSiz+"px";
             }
 
-
+            //ЕСЛИ НАЧАЛО ТРЕКА СОВПАЛО С ТАЙМЕРОМ ЗАПУСКАЕМ
             tempTrPaS.forEach( (el, i, arr)=> {
 
                 if(el.leftStartTime<=this.tempTime){
@@ -209,18 +216,21 @@ window.Clocks={
         clearTimeout(this.timeOutF);
         this.tempTime=0;
         this.TimePause=0;
+        handler.setThisHandlerLeftPos(objSCroll);
     },
     pauseTime(){
+
         clearTimeout(this.timeOutF);
         console.log("блеать:"+this.tempTime);
         this.TimePause=this.tempTime;
         this.tempTime=0;
+
     },
     setTimeFromPix(leftPix){
       //  let time= leftPix/FullTrackPack.pixSiz;
        // let milices=leftPix/FullTrackPack.pixSiz*1000;
        // let milicest=;
-        this.pauseTime();
+        closurePS.Pa();
         this.TimePause=Math.trunc((leftPix+10)/FullTrackPack.pixSiz*1000);
         console.log(" time:"+this.TimePause);
         timePool.innerHTML=`${Math.trunc(this.TimePause/60000)}:${Math.trunc(this.TimePause%60000/1000)}:${this.TimePause%1000}`;
@@ -229,7 +239,7 @@ window.Clocks={
         //  let time= leftPix/FullTrackPack.pixSiz;
         // let milices=leftPix/FullTrackPack.pixSiz*1000;
         // let milicest=;
-        this.pauseTime();
+        closurePS.Pa();
         this.timeOnStart=Math.trunc((start)/FullTrackPack.pixSiz*1000);
         this.timeOnStop=Math.trunc((stop)/FullTrackPack.pixSiz*1000);
         console.log(" time:"+this.TimePause);
@@ -262,7 +272,7 @@ MetOK.onclick = function (e) {
         try {
 
             BBbuttons[3].innerHTML = "Pl"
-            playing = false;
+         //   playing = false;
         //    el.player.setTemp120(inPut.value);
 
         } catch (e) {
@@ -281,7 +291,7 @@ Tempo.onmouseover=function(e) {
 };
 Tempo.onmouseout = function (e) {
      BBbuttons[3].innerHTML = "Pl"
-        playing = false;
+      //  playing = false;
     MetWind.style.display = "none";
 };
 
@@ -308,7 +318,62 @@ FullTrackPack.before2 = FTB;
 //console.log(AudioBufferPlayer);
 
 
-console.log(rightList);
+//console.log(rightList);
+/*rightList.ondragover=function(ev){
+    console.log(ev);
+};*/
+
+//document.ondragover=function(ev){
+    ///console.log("tartg");
+   /// console.log(ev.target);
+
+//};
+function preventDefaults (e) {
+    e.preventDefault()
+    e.stopPropagation()
+}
+
+
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    rightList.addEventListener(eventName, preventDefaults, false)
+});
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    document.addEventListener(eventName, preventDefaults, false)
+});
+
+/*document.addEventListener ("drop", function (event ) {
+    console.log("puc2");
+    event.preventDefault ();
+    event.stopPropagation();
+        console.log("targt");
+        console.log(event.target);
+         console.log("event");
+        console.log(event);
+         console.log("eventtrans");
+        console.log( event.dataTransfer);
+        console.log("eventtrans");
+         console.log( event.dataTransfer.files);
+      //  var data = event.dataTransfer.getData ("текст");
+    //var data = event.dataTransfer.;
+
+
+});*/
+rightList.ondrop=function(event){
+
+    event.preventDefault ();
+    event.stopPropagation();
+
+    console.log("\ntargt");
+    console.log(event.target);
+    console.log("\nevent");
+    console.log(event);
+    console.log("\neventtrans");
+    console.log( event.dataTransfer);
+    console.log("\neventtransfiles");
+    console.log( event.dataTransfer.files);
+};
+
+
 buttonAct.onclick = function () {
    // console.log("hui")
     trackChoicer.classList.toggle('transform-active');
@@ -317,11 +382,6 @@ buttonAct.onclick = function () {
  
     
 };
-
-
-
-
-
 
 
 
@@ -408,7 +468,7 @@ for (let track of trackPacks) {
             
            // console.log("move"); 
             track.onmousemove = null;
-        }
+        };
 
         track.onmouseup = function (e) {
             track.onmousemove = null;

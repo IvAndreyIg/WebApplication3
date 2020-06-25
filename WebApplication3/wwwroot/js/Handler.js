@@ -14,6 +14,26 @@ export default class Handler{
         this.clocks.setTimeFromPix(this.RealStartLeft+this._RealArrPossLeft);
     }
 
+
+    get TempArrPossLeft(){
+
+        return Number.parseFloat(this.leftRight[2].style.left);
+    }
+    //МЕНЬШЕ -10 НЕ ВИДНО СТРЕЛКУ
+    set TempArrPossLeft(val){
+        console.log("TEMPLEFT"+val);
+        this.leftRight[2].style.left = val+ "px";
+
+            if(val < -10){
+                this.leftRight[2].style.display="none";
+            }else{
+                this.leftRight[2].style.display="";
+            }
+
+
+    }
+
+
     constructor(className,objScrollSt,clocks) {
         this.div=document.querySelector(className);
         this.width=this.div.offsetWidth;
@@ -167,19 +187,20 @@ export default class Handler{
         if(this.templeft>=0){
               console.log("нупизда1");
             this.div.style.left = this.templeft + "px";
-            this.leftRight[2].style.left=this.RealArrPossLeft+"px";
+            //this.TempArrPossLeft=this.RealArrPossLeft;
             this.div.style.width = this.width+"px";
             this.leftRight[1].hidden=false;
             this.leftRight[0].hidden=false;
+            this.TempArrPossLeft = (this.RealArrPossLeft >= -11 && this.RealArrPossLeft <= (this.width - 11) ? this.RealArrPossLeft : (this.RealArrPossLeft >= -11 ? (this.width - 11) : -11)) ;
         }
         //отступ не видно
         else{
             console.log("нупизда2"+"this.thisSize:");
             this.div.style.left="0px";
             if((this.width+this.templeft-this.bodyDiv.offsetWidth)<=0){
-                this.leftRight[2].style.left=this.RealArrPossLeft+this.templeft+"px";
+                this.TempArrPossLeft=(this.RealArrPossLeft+this.templeft);
                 this.div.style.width=((this.width+this.templeft>0)?this.width+this.templeft:0)+"px";
-                console.log("нупизда3 ");
+                console.log("нупизда3 "+this.RealArrPossLeft+" "+this.templeft);
                 this.leftRight[0].hidden=true;
             }
         }
@@ -189,13 +210,14 @@ export default class Handler{
             this.div.style.width=this.bodyDiv.offsetWidth -  + Number.parseInt(this.div.style.left)+"px";
             console.log("нупизда4"+" "+this.div.style.width+" "+ this.bodyDiv.offsetWidth+" "+this.div.offsetWidth+" "+Number.parseInt(this.div.style.left) );
 console.log((this.div.offsetWidth - (this.div.offsetWidth + Number.parseInt(this.div.style.left)))+"px");
+
         }
 
         //this.leftRight[2].style.left
 
         //Длина блока <текуща ширина трека+ трек лефт
-        let temppos = (this.RealArrPossLeft >= -10 && this.RealArrPossLeft <= (this.width - 10) ? this.RealArrPossLeft : (this.RealArrPossLeft >= -10 ? (this.width - 10) : -10)) ;
-        this.leftRight[2].style.left = temppos+ "px";
+
+
 
         this.clocks.setStartStopTimeFromPix(this.RealStartLeft,this.RealStartLeft+this.width);
         this.clocks.setTimeFromPix(this.RealStartLeft+this._RealArrPossLeft);
