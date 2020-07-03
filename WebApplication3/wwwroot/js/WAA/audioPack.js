@@ -96,7 +96,7 @@ export default class AudioBufferPlayer {
         this.source.playbackRate.value = (typeof rate) == 'number' ? rate : 1;
     }
 
-    playTrack(perspos,...nodes) {
+    playTrack(perspos,mediaStreamDestination,...nodes) {
 
         if (!this.playing)
             if (this.trackAudioBuffer != null) {
@@ -120,7 +120,7 @@ export default class AudioBufferPlayer {
                 this.position=perspos!==undefined?perspos*this.trackAudioBuffer.duration:this.position;
                 this.startTime = this.aContext.currentTime - (this.position || 0);
 
-                this.connect();
+                this.connect(mediaStreamDestination);
 
 
                 this.source.start(this.aContext.currentTime, this.position);
@@ -165,12 +165,12 @@ export default class AudioBufferPlayer {
         console.log(this.nodes);
         return this;
     }
-    connect(nodes) {
+    connect(mediaRec,nodes) {
         this.disconnectALL();
         this.nodes = nodes=!undefined > 0 ? nodes : this.nodes;
         let thisNode = this.source;
-        if (this.nodes.size > 0) {
-
+       // if (this.nodes.size > 0) {
+            if (false) {
             console.log("node:");
             console.log(thisNode);
             console.log(this.source);
@@ -183,8 +183,11 @@ export default class AudioBufferPlayer {
                 console.log("VERBON")
                 thisNode.connect(this.verb);
             }
-            else
+            else {
                 thisNode.connect(this.aContext.destination);
+                if(mediaRec!==undefined)
+                    thisNode.connect(mediaRec);
+            }
         }
         if (this.verb) {
             console.log("VERBON")
@@ -192,6 +195,8 @@ export default class AudioBufferPlayer {
         }
         else {
             thisNode.connect(this.aContext.destination);
+            if(mediaRec!==undefined)
+                thisNode.connect(mediaRec);
         }
 
 
@@ -224,10 +229,10 @@ export default class AudioBufferPlayer {
     }
     disconnectALL() {
 
-        this.nodes.forEach((val, val2, setic) => {
+     //   this.nodes.forEach((val, val2, setic) => {
 
-            val.disconnect();
-        })
+       //     val.disconnect();
+     //   })
 
         this.source.disconnect();
         // this.connect();

@@ -71,3 +71,17 @@
     left:-10px;
     position:absolute;
 }
+.saveButton {
+    position: relative;
+    display: inline;
+    left: 300px;
+    border: 2px solid #c508c7;
+    border-radius: 8px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.saveButton:hover {
+        background: aquamarine;
+}
+

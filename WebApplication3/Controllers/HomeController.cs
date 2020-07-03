@@ -13,7 +13,7 @@ namespace WebApplication3.Controllers
     public class HomeController : Controller
 
     {
-
+/*
         private readonly ILogger _logger;
 
         private readonly ProductService db;
@@ -138,7 +138,7 @@ namespace WebApplication3.Controllers
 
 
 
-
+*/
 
     }
 }

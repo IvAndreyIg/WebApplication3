@@ -6,7 +6,7 @@ import AudioBufferPlayer from "./WAA/audioPack.js"
 import FullTrackPack from "./classes.js";
 import AllElements from "./DOMController.js";
 import Handler from "./Handler.js";
-import { getRId, getDragEl,getPauseSVG } from "./ElementsPack.js";
+import { getRId, getDragEl,getPauseSVG,getPlaySVG } from "./ElementsPack.js";
 //import Clocks from "./Clocks.js";
 let tRacksM = new Map();
 document.tr = tRacksM;
@@ -25,19 +25,22 @@ let winBlock = document.querySelector(".winBlock");
 
 let scrollBar = document.querySelector(".panel21");
 let fuckPanel = document.querySelector(".panel2");
+let saveButton = document.querySelector(".saveButton");
 
 
 let timePool=document.querySelector(".timePool");
 let handler;
+let mediaRecorder
 let FTM = document.querySelector("#FTM");
 let FTB = document.querySelector("#FTB");
 let BBbuttons = document.getElementsByClassName("BottomButton");
-
+BBbuttons[3].innerHTML = "";
+BBbuttons[3].append(getPlaySVG());
 
 let closurePS=(()=>{
     let playing = false;
-    let Pl=()=>{
-        window.Clocks.startTimer();
+    let Pl=(mediaStreamDestination)=>{
+        window.Clocks.startTimer(mediaStreamDestination);
 
         console.log("start");
         BBbuttons[3].innerHTML = "";
@@ -60,7 +63,8 @@ let closurePS=(()=>{
         });
 
         console.log("stop");
-        BBbuttons[3].innerHTML = "Pl";
+        BBbuttons[3].innerHTML = "";
+        BBbuttons[3].append(getPlaySVG());
         playing = false;
     };
     let ST=()=>{
@@ -79,7 +83,8 @@ let closurePS=(()=>{
         });
 
         console.log("stop");
-        BBbuttons[3].innerHTML = "Pl";
+        BBbuttons[3].innerHTML = "";
+        BBbuttons[3].append(getPlaySVG());
         playing = false;
     };
     let toggle=()=>{
@@ -117,7 +122,7 @@ window.Clocks={
         this.stopAll();
 
     },
-    startTimer(){
+    startTimer(mediaStreamDestination){
       //  let tempTime;
         let maThTime=this.TimePause>0?this.TimePause:this.timeOnStart;
         console.log("checkTimes:"+maThTime+" "+this.TimePause+" "+this.timeOnStart);
@@ -133,8 +138,7 @@ window.Clocks={
             try {
               //  console.log("el.player.dur");
                // console.log(el.duration);
-         //       console.log("GAVNO");
-           //     console.log(el);
+
              //   console.log(maThTime+"| puccc|"+el.leftStartTime+"| |"+this.timeOnStop+"| "+el.endTime);
                 if(maThTime<el.leftStartTime){
                     console.log("p1");
@@ -142,10 +146,7 @@ window.Clocks={
                         console.log("p2");
                        // this.timeOnStart-el.leftStartTime
                         tempTrPaS.push(el);
-
                     }
-
-
                 }
                 else{
                     //слева
@@ -168,11 +169,22 @@ window.Clocks={
             }
         });
         //ЕСЛИ ВРЕМЯ НАЧАЛО УЖЕ ПРОШЛО ЗАПУСКАЕМ ТРЕК
+
+        try {
+            mediaRecorder.start();
+            // код ...
+
+        } catch (err) {
+            console.log("ошибка");
+                console.log(err);
+            // обработка ошибки
+
+        }
         tempTrToS.forEach( (el, i, arr)=> {
 
             let emptywidths=maThTime-el.leftStartTime;
             let trashTime=(maThTime-el.leftStartTime)/(el.duration*1000);
-            setTimeout(x=> el.player.playTrack(trashTime),0);
+            setTimeout(x=> el.player.playTrack(trashTime,mediaStreamDestination),0);
             console.log("LWid:"+el.duration*1000+" "+emptywidths+" "+trashTime) ;
         });
 
@@ -201,7 +213,7 @@ window.Clocks={
 
                 if(el.leftStartTime<=this.tempTime){
                     console.log(i+" ==== "+i);
-                    el.player.playTrack(0);
+                    el.player.playTrack(0,mediaStreamDestination);
                     tempTrPaS.splice(i, 1);
                 }
             });
@@ -213,10 +225,25 @@ window.Clocks={
         //---------------
     },
     stopTime(){
+
+
+        try {
+            mediaRecorder.stop();
+            // код ...
+
+        } catch (err) {
+            console.log("ошибка");
+            console.log(err);
+            // обработка ошибки
+
+        }
+
+
         clearTimeout(this.timeOutF);
         this.tempTime=0;
         this.TimePause=0;
         handler.setThisHandlerLeftPos(objSCroll);
+
     },
     pauseTime(){
 
@@ -271,7 +298,8 @@ MetOK.onclick = function (e) {
     tRacksM.forEach(function (el, i, arr) {
         try {
 
-            BBbuttons[3].innerHTML = "Pl"
+            BBbuttons[3].innerHTML = "";
+            BBbuttons[3].append(getPlaySVG());
          //   playing = false;
         //    el.player.setTemp120(inPut.value);
 
@@ -290,7 +318,8 @@ Tempo.onmouseover=function(e) {
     MetWind.style.display="block";
 };
 Tempo.onmouseout = function (e) {
-     BBbuttons[3].innerHTML = "Pl"
+    BBbuttons[3].innerHTML = "";
+    BBbuttons[3].append(getPlaySVG());
       //  playing = false;
     MetWind.style.display = "none";
 };
@@ -690,3 +719,39 @@ scrollBar.addEventListener('scroll', function (e) {
 //первая инициализация таймлайна
 topCanvas.can(FullTrackPack.pixSiz, objSCroll.scrollBarLeft, objSCroll.scrollBarLeft + topCanvas.offsetWidth);
 
+saveButton.onclick=function () {
+    document.body.style.pointerEvents = "none";
+    window.Clocks.stopAll();
+    let dest = AudioBufferPlayer.audioContext.createMediaStreamDestination();
+
+     mediaRecorder = new MediaRecorder(dest.stream);
+
+   closurePS.Pl(dest);
+    let chunks = [];
+
+    mediaRecorder.ondataavailable = function (evt) {
+        // push each chunk (blobs) in an array
+        console.log("Evt:", evt);
+        chunks.push(evt.data);
+        console.log("\n", evt);
+    };
+
+    mediaRecorder.onstop = function (evt) {
+        // Make blob out of our blobs, and open it.
+         console.log("view:");
+          console.log(chunks);
+        var blob = new Blob(chunks, {'type': 'audio/ogg; codecs=opus'});
+         console.log("\n\n\n",blob);
+        let sr = URL.createObjectURL(blob);
+
+        //srec.href = sr;
+        console.log("sr");
+        console.log(sr);
+        document.querySelector(".aud").src =
+            srec.href = sr;
+
+
+        mediaRecorder=undefined;
+        document.body.style.pointerEvents = "";
+    };
+};

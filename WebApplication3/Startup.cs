@@ -35,7 +35,7 @@ namespace WebApplication3
 
             services.AddControllersWithViews();
             //добавим сервис 
-            services.AddTransient<ProductService>();
+         //   services.AddTransient<ProductService>();
             services.AddTransient<TrackService>();
         }
 
