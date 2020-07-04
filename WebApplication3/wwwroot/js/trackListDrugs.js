@@ -747,8 +747,7 @@ saveButton.onclick=function () {
         //srec.href = sr;
         console.log("sr");
         console.log(sr);
-        document.querySelector(".aud").src =
-            srec.href = sr;
+        document.querySelector(".puc").src = sr;
 
 
         mediaRecorder=undefined;
